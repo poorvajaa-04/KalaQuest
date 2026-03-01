@@ -13,13 +13,20 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { PasswordInput } from '../ui/password-input';
-import { useAuth } from '@/firebase';
-import { cn } from '@/lib/utils';
+import { useAuth, useFirestore } from '@/firebase';
 
 type SignupRole = 'user' | 'artisan';
 
@@ -38,6 +45,7 @@ export function SignupForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [role, setRole] = useState<SignupRole>('user');
   const auth = useAuth();
+  const firestore = useFirestore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,7 +58,16 @@ export function SignupForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const credential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const user = credential.user;
+      const fallbackName = values.email.split('@')[0] || 'User';
+
+      await setDoc(doc(firestore, 'users', user.uid), {
+        uid: user.uid,
+        name: user.displayName || fallbackName,
+        email: user.email || values.email,
+        role,
+      });
 
       if (typeof window !== 'undefined') {
         window.localStorage.setItem('loginRole', role);
@@ -63,7 +80,7 @@ export function SignupForm() {
           : "Welcome! You've been successfully signed up.",
       });
 
-      router.push(role === 'artisan' ? '/artisan-account' : '/account');
+      router.push(role === 'artisan' ? '/artisan-hub' : '/account');
     } catch (error: any) {
       console.error(error);
       toast({
@@ -81,24 +98,15 @@ export function SignupForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-2">
           <FormLabel>Sign Up As</FormLabel>
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              type="button"
-              variant={role === 'user' ? 'default' : 'outline'}
-              onClick={() => setRole('user')}
-              className={cn('w-full')}
-            >
-              User
-            </Button>
-            <Button
-              type="button"
-              variant={role === 'artisan' ? 'default' : 'outline'}
-              onClick={() => setRole('artisan')}
-              className={cn('w-full')}
-            >
-              Artisan
-            </Button>
-          </div>
+          <Select value={role} onValueChange={(value) => setRole(value as SignupRole)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Choose a role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="user">User</SelectItem>
+              <SelectItem value="artisan">Artisan</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <FormField

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/hooks/use-cart";
 import { Cart } from "@/components/cart";
 import { useUser } from "@/firebase/auth/use-user";
@@ -27,6 +27,34 @@ export function Header() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { cartCount } = useCart();
   const { user, isLoading } = useUser();
+  const [isArtisan, setIsArtisan] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const syncRole = () => {
+      const role = window.localStorage.getItem("loginRole");
+      setIsArtisan(role === "artisan");
+    };
+
+    syncRole();
+    window.addEventListener("storage", syncRole);
+    window.addEventListener("loginRoleChanged", syncRole);
+    return () => {
+      window.removeEventListener("storage", syncRole);
+      window.removeEventListener("loginRoleChanged", syncRole);
+    };
+  }, [user]);
+
+  const visibleNavItems = user && isArtisan
+    ? [
+        ...navItems,
+        { href: "/artisan-dashboard", label: "Artisan Dashboard" },
+        { href: "/artisan-account/upload", label: "Sell Products" },
+      ]
+    : navItems;
 
   const renderAuthButton = () => {
     if (isLoading) {
@@ -56,7 +84,7 @@ export function Header() {
         </Link>
         <div className="flex items-center gap-2">
           <nav className="hidden items-center gap-6 md:flex">
-            {navItems.map((item) => (
+            {visibleNavItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -104,7 +132,7 @@ export function Header() {
                     <span className="font-headline text-xl font-semibold tracking-wide">Kala Quest</span>
                   </Link>
                   <nav className="flex flex-col gap-6">
-                    {navItems.map((item) => (
+                    {visibleNavItems.map((item) => (
                       <Link
                         key={item.href}
                         href={item.href}

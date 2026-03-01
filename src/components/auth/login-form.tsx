@@ -15,13 +15,25 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { PasswordInput } from '../ui/password-input';
-import { useAuth } from '@/firebase';
-import { cn } from '@/lib/utils';
+import { useAuth, useFirestore } from '@/firebase';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 type LoginRole = 'user' | 'artisan';
+
+const normalizeRole = (value: unknown): LoginRole => {
+  const cleaned = String(value ?? '').trim().toLowerCase();
+  return cleaned === 'artisan' || cleaned === 'artisian' ? 'artisan' : 'user';
+};
 
 const formSchema = z.object({
   email: z.string().email({
@@ -38,6 +50,7 @@ export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [role, setRole] = useState<LoginRole>('user');
   const auth = useAuth();
+  const firestore = useFirestore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,18 +63,33 @@ export function LoginForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
+      const credential = await signInWithEmailAndPassword(auth, values.email, values.password);
+      const user = credential.user;
+      const userSnap = await getDoc(doc(firestore, 'users', user.uid));
+      const storedRoleRaw = userSnap.exists() ? userSnap.data()?.role : undefined;
+      const storedRole = storedRoleRaw == null ? null : normalizeRole(storedRoleRaw);
+      let normalizedRole: LoginRole = storedRole ?? role;
+
+      if (normalizedRole !== 'artisan') {
+        const artisanSnap = await getDoc(doc(firestore, 'artisans', user.uid));
+        if (artisanSnap.exists()) {
+          normalizedRole = 'artisan';
+        }
+      }
+
+      console.log('Fetched user role:', normalizedRole);
 
       if (typeof window !== 'undefined') {
-        window.localStorage.setItem('loginRole', role);
+        window.localStorage.setItem('loginRole', normalizedRole);
+        window.dispatchEvent(new Event('loginRoleChanged'));
       }
 
       toast({
         title: 'Login Successful',
-        description: role === 'artisan' ? 'Welcome back, artisan.' : 'Welcome back!',
+        description: normalizedRole === 'artisan' ? 'Welcome back, artisan.' : 'Welcome back!',
       });
 
-      router.push(role === 'artisan' ? '/artisan-account' : '/account');
+      router.push(normalizedRole === 'artisan' ? '/artisan-dashboard' : '/');
     } catch (error: any) {
       console.error(error);
       toast({
@@ -79,26 +107,16 @@ export function LoginForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-2">
           <FormLabel>Login As</FormLabel>
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              type="button"
-              variant={role === 'user' ? 'default' : 'outline'}
-              onClick={() => setRole('user')}
-              className={cn('w-full')}
-            >
-              User
-            </Button>
-            <Button
-              type="button"
-              variant={role === 'artisan' ? 'default' : 'outline'}
-              onClick={() => setRole('artisan')}
-              className={cn('w-full')}
-            >
-              Artisan
-            </Button>
-          </div>
+          <Select value={role} onValueChange={(value) => setRole(value as LoginRole)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Choose a role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="user">User</SelectItem>
+              <SelectItem value="artisan">Artisan</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-
         <FormField
           control={form.control}
           name="email"
@@ -126,7 +144,7 @@ export function LoginForm() {
           )}
         />
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? 'Signing In...' : `Sign In as ${role === 'artisan' ? 'Artisan' : 'User'}`}
+          {isLoading ? 'Signing In...' : 'Sign In'}
         </Button>
       </form>
     </Form>
