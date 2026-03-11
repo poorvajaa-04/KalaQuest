@@ -26,7 +26,17 @@ Login -> Dashboard -> Featured Crafts -> Story Quest -> Interactive Play -> Cult
 ![Quest Experience](docs/screenshots/Current-Quest-And-Games.png)
 
 ### Plan A Visit
-![Play with Heritage](docs/screenshots/Plan-A-Visit.png)
+![Plan A visit](docs/screenshots/Plan-A-Visit.png)
+
+### Mystery Stories
+![Mystery Stories](docs/screenshots/Mystery-Stories.png)
+
+### Meet the artisans
+![Meet the artisans](docs/screenshots/Meet-the-artisans.png)
+
+### Opportunities
+![Opportunities](docs/screenshots/Opportunities.png)
+
 
 ## What Kala Quest Does (At a Glance)
 Opens with a personalized dashboard featuring curated crafts and active learning quests
