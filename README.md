@@ -37,7 +37,6 @@ Login -> Dashboard -> Featured Crafts -> Story Quest -> Interactive Play -> Cult
 ### Opportunities
 ![Opportunities](docs/screenshots/Opportunities.png)
 
-
 ## What Kala Quest Does (At a Glance)
 Opens with a personalized dashboard featuring curated crafts and active learning quests
 
