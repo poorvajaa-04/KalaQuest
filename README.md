@@ -120,3 +120,8 @@ If a chat message starts with `remember ...`, it is auto-stored as memory.
 - `src/firebase` - Firebase configuration and helpers
 - `src/ai` - Genkit setup, chatbot logic, vector memory
 - `docs` - product blueprint and backend notes
+
+## Contributors:
+This project was developed as a group project by:
+- Mousumi Parida
+- Poorvajaa S
