@@ -52,7 +52,6 @@ export function Header() {
     ? [
         ...navItems,
         { href: "/artisan-dashboard", label: "Artisan Dashboard" },
-        { href: "/artisan-account/upload", label: "Sell Products" },
       ]
     : navItems;
 

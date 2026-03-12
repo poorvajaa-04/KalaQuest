@@ -62,12 +62,26 @@ export function SignupForm() {
       const user = credential.user;
       const fallbackName = values.email.split('@')[0] || 'User';
 
+      const normalizedEmail = (user.email || values.email).toLowerCase();
+
       await setDoc(doc(firestore, 'users', user.uid), {
+        id: user.uid,
         uid: user.uid,
         name: user.displayName || fallbackName,
-        email: user.email || values.email,
+        email: normalizedEmail,
         role,
       });
+
+      await setDoc(
+        doc(firestore, 'user_directory', user.uid),
+        {
+          uid: user.uid,
+          name: user.displayName || fallbackName,
+          email: normalizedEmail,
+          role,
+        },
+        { merge: true }
+      );
 
       if (typeof window !== 'undefined') {
         window.localStorage.setItem('loginRole', role);

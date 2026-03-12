@@ -8,6 +8,11 @@ export type Artisan = {
   craft: string;
   bio: string;
   image: string;
+<<<<<<< HEAD
+=======
+  userId?: string;
+  email?: string;
+>>>>>>> 65a6139 (Update fixes for build and inbox)
 };
 
 export type Product = {
@@ -372,6 +377,11 @@ export const artisans: Artisan[] = [
     craft: "Jaipur Blue Pottery",
     bio: "From a long line of potters, Rajesh Kumar masterfully combines traditional techniques with contemporary designs, keeping the centuries-old art of Jaipur Blue Pottery alive and vibrant.",
     image: placeholderImages.find(p => p.id === 'artisan-1')?.imageUrl || '',
+<<<<<<< HEAD
+=======
+    email: 'omprakashparida8127@gmail.com',
+    userId: 'xaqsIQZ9XcTQrKGEcjGIVDNWg9c2',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
   {
     id: "artisan-2",
@@ -379,6 +389,11 @@ export const artisans: Artisan[] = [
     craft: "Kashmiri Pashmina Weaving",
     bio: "Fatima Begum has been weaving pashmina shawls for over 40 years, her hands telling the story of a rich cultural heritage passed down through generations of women in her family.",
     image: placeholderImages.find(p => p.id === 'artisan-2')?.imageUrl || '',
+<<<<<<< HEAD
+=======
+    email: 'mousumiparida5520@gmail.com',
+    userId: 'unj2sEfXFBeOQ8SYEDMJLUDlOYC3',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
   {
     id: "artisan-3",
@@ -386,6 +401,11 @@ export const artisans: Artisan[] = [
     craft: "Madhubani Painting",
     bio: "Sanjay Jha's intricate Madhubani paintings are a celebration of nature and mythology. His work is characterized by its vibrant colors and detailed patterns, a hallmark of this ancient Bihari art form.",
     image: placeholderImages.find(p => p.id === 'artisan-3')?.imageUrl || '',
+<<<<<<< HEAD
+=======
+    email: 'chellarapu.25bhi10128@vitbhopal.ac.in',
+    userId: 'o5aBSIuMubh8sXrlJc9zTk8w9Ow1v',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
   {
     id: "artisan-4",
@@ -393,6 +413,11 @@ export const artisans: Artisan[] = [
     craft: "Sandalwood Carving",
     bio: "A master carver from Rajasthan, Prakash Sharma transforms blocks of sandalwood into exquisite sculptures and artifacts, each piece a testament to his precision and artistic vision.",
     image: placeholderImages.find(p => p.id === 'artisan-4')?.imageUrl || '',
+<<<<<<< HEAD
+=======
+    email: 'mousumiparida454@gmail.com',
+    userId: 'wRsrZYnvbsNeIcF5EXtO76bENCg1',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
   {
     id: 'artisan-5',
@@ -400,6 +425,11 @@ export const artisans: Artisan[] = [
     craft: 'Terracotta Pottery',
     bio: 'Priya Das brings a rustic charm to modern homes with her terracotta creations, inspired by the ancient pottery traditions of Bengal. Each piece is hand-shaped and sun-dried.',
     image: placeholderImages.find(p => p.id === 'artisan-5')?.imageUrl || '',
+<<<<<<< HEAD
+=======
+    email: 'poorvaja.16@gmail.com',
+    userId: 'F4A7LxEcV5QEctDTU85EutoVH9W2',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
   {
     id: 'artisan-6',
@@ -407,6 +437,10 @@ export const artisans: Artisan[] = [
     craft: 'Leatherwork (Mojari Shoes)',
     bio: 'Rohan Joshi is a master craftsman of Mojari, the traditional embroidered footwear of Rajasthan. His family has been perfecting this craft for over a century, blending comfort and regal style.',
     image: placeholderImages.find(p => p.id === 'artisan-6')?.imageUrl || '',
+<<<<<<< HEAD
+=======
+    email: 'rohan.joshi@kalaquest.in',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
   {
     id: 'artisan-7',
@@ -414,6 +448,10 @@ export const artisans: Artisan[] = [
     craft: 'Bandhani Tie-Dye',
     bio: 'From the Kutch region of Gujarat, Meera Patel creates mesmerizing patterns through the meticulous art of Bandhani. Each dot is tied by hand before dyeing, resulting in vibrant, unique textiles.',
     image: placeholderImages.find(p => p.id === 'artisan-7')?.imageUrl || '',
+<<<<<<< HEAD
+=======
+    email: 'meera.patel@kalaquest.in',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
   {
     id: 'artisan-8',
@@ -421,6 +459,10 @@ export const artisans: Artisan[] = [
     craft: 'Metal Embossing (Tarkashi)',
     bio: 'Arjun Singh practices the delicate art of Tarkashi, inlaying fine brass wires into wood. His work adorns decorative boxes and furniture with intricate geometric and floral patterns.',
     image: "https://picsum.photos/seed/artisan8/400/400",
+<<<<<<< HEAD
+=======
+    email: 'arjun.singh@kalaquest.in',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
   {
     id: 'artisan-9',
@@ -428,6 +470,10 @@ export const artisans: Artisan[] = [
     craft: 'Appliqué (Pipli)',
     bio: 'Sunita Devi is a celebrated artist from Pipli, Odisha, known for her vibrant appliqué work. She stitches together pieces of colored cloth to create vivid depictions of gods, animals, and nature.',
     image: placeholderImages.find(p => p.id === 'artisan-9')?.imageUrl || '',
+<<<<<<< HEAD
+=======
+    email: 'sunita.devi@kalaquest.in',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
   {
     id: 'artisan-10',
@@ -435,6 +481,10 @@ export const artisans: Artisan[] = [
     craft: 'Kalamkari Painting',
     bio: 'Using a traditional pen made from bamboo, Vikram Reddy free-hands mythological scenes onto fabric with natural dyes. His Kalamkari art from Andhra Pradesh is a testament to storytelling through visuals.',
     image: placeholderImages.find(p => p.id === 'artisan-10')?.imageUrl || '',
+<<<<<<< HEAD
+=======
+    email: 'vikram.reddy@kalaquest.in',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
   {
     id: 'artisan-11',
@@ -442,6 +492,10 @@ export const artisans: Artisan[] = [
     craft: 'Zardozi Embroidery',
     bio: 'Ishita Sharma is an expert in Zardozi, a lavish embroidery technique using gold and silver threads. Her work, often seen on luxurious fabrics, revives the grandeur of the Mughal era.',
     image: placeholderImages.find(p => p.id === 'artisan-11')?.imageUrl || '',
+<<<<<<< HEAD
+=======
+    email: 'ishita.sharma@kalaquest.in',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
   {
     id: 'artisan-12',
@@ -449,6 +503,10 @@ export const artisans: Artisan[] = [
     craft: 'Bidriware (Metal Inlay)',
     bio: 'From Bidar, Karnataka, Anand Verma creates stunning Bidriware by inlaying pure silver onto a blackened zinc and copper alloy. This 14th-century Persian art form is known for its striking contrast.',
     image: placeholderImages.find(p => p.id === 'artisan-12')?.imageUrl || '',
+<<<<<<< HEAD
+=======
+    email: 'anand.verma@kalaquest.in',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
   {
     id: 'artisan-13',
@@ -456,6 +514,10 @@ export const artisans: Artisan[] = [
     craft: 'Coir Weaving',
     bio: "Kavita Nair transforms coconut fibers into beautiful and durable coir products, from floor mats to decorative items. Her work represents Kerala's sustainable and eco-friendly craft traditions.",
     image: placeholderImages.find(p => p.id === 'artisan-13')?.imageUrl || '',
+<<<<<<< HEAD
+=======
+    email: 'kavita.nair@kalaquest.in',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
   {
     id: 'artisan-14',
@@ -463,6 +525,10 @@ export const artisans: Artisan[] = [
     craft: 'Lacquerware',
     bio: 'Mohan Lal is a skilled artisan from Channapatna, the "toy town" of Karnataka. He uses a unique technique of applying colored lacquer to wood, creating smooth, vibrant, and safe wooden toys.',
     image: placeholderImages.find(p => p.id === 'artisan-14')?.imageUrl || '',
+<<<<<<< HEAD
+=======
+    email: 'mohan.lal@kalaquest.in',
+>>>>>>> 65a6139 (Update fixes for build and inbox)
   },
 ];
 
@@ -612,4 +678,7 @@ export const products: Product[] = [
     artisanId: "artisan-14",
   },
 ];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 65a6139 (Update fixes for build and inbox)
