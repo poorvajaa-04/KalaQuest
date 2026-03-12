@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { PasswordInput } from '../ui/password-input';
@@ -84,9 +84,31 @@ export function LoginForm() {
         window.dispatchEvent(new Event('loginRoleChanged'));
       }
 
+      if (user.email) {
+        await setDoc(
+          doc(firestore, 'user_directory', user.uid),
+          {
+            uid: user.uid,
+            name: user.displayName || user.email.split('@')[0],
+            email: user.email.toLowerCase(),
+            role: normalizedRole,
+          },
+          { merge: true }
+        );
+      }
+
       toast({
         title: 'Login Successful',
         description: normalizedRole === 'artisan' ? 'Welcome back, artisan.' : 'Welcome back!',
+      });
+
+      void addDoc(collection(firestore, 'login_events'), {
+        userId: user.uid,
+        email: user.email || values.email,
+        role: normalizedRole,
+        createdAt: serverTimestamp(),
+      }).catch((err) => {
+        console.warn('Failed to log login event for email notification:', err);
       });
 
       router.push(normalizedRole === 'artisan' ? '/artisan-dashboard' : '/');

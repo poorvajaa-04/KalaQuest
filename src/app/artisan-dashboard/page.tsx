@@ -1,7 +1,10 @@
 'use client';
 
+import Link from 'next/link';
 import { AuthGuard } from '@/components/auth/auth-guard';
 import { ArtisanRoleSync } from '@/components/auth/artisan-role-sync';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useUser } from '@/firebase/auth/use-user';
 import { jobOpportunities, products } from '@/lib/data';
 import { cn } from '@/lib/utils';
@@ -82,6 +85,39 @@ export default function ArtisanDashboardPage() {
             </div>
             <div className="border-b border-slate-200 pb-4" />
           </header>
+
+          <section className="mb-10">
+            <div className="mb-4">
+              <h2 className="text-2xl font-semibold text-slate-900">Artisan Hub</h2>
+              <p className="text-sm text-slate-500">
+                Quick actions for selling crafts and managing payouts.
+              </p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <Card className="border-slate-200 bg-white/80 shadow-sm">
+                <CardHeader>
+                  <CardTitle className="font-headline text-xl">Sell Products</CardTitle>
+                  <CardDescription>Create and manage your craft listings.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button asChild className="w-full">
+                    <Link href="/artisan-account/upload">Start Selling</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card className="border-slate-200 bg-white/80 shadow-sm">
+                <CardHeader>
+                  <CardTitle className="font-headline text-xl">Receive Payments</CardTitle>
+                  <CardDescription>Set up your payout details securely.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href="/artisan-account/payouts">Set Up Payouts</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
 
           <section className="grid gap-4 md:grid-cols-2" id="overview">
             {stats.map((stat) => (
@@ -253,9 +289,12 @@ export default function ArtisanDashboardPage() {
                   Respond to buyers and manage custom requests.
                 </p>
               </div>
-              <button className="text-sm font-medium text-amber-700" type="button">
+              <a
+                href="/inbox"
+                className="text-sm font-medium text-amber-700 hover:text-amber-800"
+              >
                 Open Inbox
-              </button>
+              </a>
             </div>
             <div className="mt-4 rounded-xl border border-dashed border-slate-200 bg-white p-6 text-sm text-slate-500">
               No new messages yet. When buyers reach out, conversations will appear here.

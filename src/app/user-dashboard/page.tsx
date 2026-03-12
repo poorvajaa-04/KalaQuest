@@ -45,6 +45,9 @@ export default function UserDashboardPage() {
               <Button asChild variant="ghost" className="justify-start">
                 <Link href="/checkout">Checkout</Link>
               </Button>
+              <Button asChild variant="ghost" className="justify-start">
+                <Link href="/inbox">Open Inbox</Link>
+              </Button>
             </CardContent>
           </Card>
         </div>
