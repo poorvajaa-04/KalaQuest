@@ -4,20 +4,23 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import type { Artisan } from '@/lib/data';
+import type { ArtisanRecord } from '@/types/artisan';
 import { ArrowRight } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/firebase/auth/use-user';
 
 type ArtisanCardProps = {
-  artisan: Artisan;
+  artisan: ArtisanRecord;
 };
 
 export function ArtisanCard({ artisan }: ArtisanCardProps) {
   const { toast } = useToast();
   const router = useRouter();
   const { user } = useUser();
+  const coverImage = artisan.galleryImages[0] || `https://picsum.photos/seed/${artisan.id}/600/600`;
+  const storyPreview =
+    artisan.storyLong.length > 165 ? `${artisan.storyLong.slice(0, 165).trimEnd()}...` : artisan.storyLong;
 
   const handleMessage = () => {
     if (!user) {
@@ -50,27 +53,31 @@ export function ArtisanCard({ artisan }: ArtisanCardProps) {
 
   return (
     <Card className="flex flex-col overflow-hidden parchment transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-      <div className="relative aspect-square w-full">
+      <Link href={`/artisans/${artisan.id}`} className="relative aspect-square w-full">
         <Image
-          src={artisan.image}
+          src={coverImage}
           alt={`Portrait of ${artisan.name}`}
           fill
           className="object-cover"
           data-ai-hint="indian artisan"
         />
-      </div>
+      </Link>
       <CardHeader>
-        <CardTitle className="font-headline text-2xl">{artisan.name}</CardTitle>
-        <CardDescription className="text-primary font-semibold">{artisan.craft}</CardDescription>
+        <CardTitle className="font-headline text-2xl">
+          <Link href={`/artisans/${artisan.id}`} className="hover:text-primary transition-colors">
+            {artisan.name}
+          </Link>
+        </CardTitle>
+        <CardDescription className="text-primary font-semibold">{artisan.craftType}</CardDescription>
       </CardHeader>
       <CardContent className="flex-grow">
-        <p className="text-sm text-foreground/80 line-clamp-3">{artisan.bio}</p>
+        <p className="text-sm text-foreground/80 line-clamp-3">{storyPreview}</p>
       </CardContent>
       <CardFooter>
         <div className="flex w-full items-center justify-between gap-3">
           <Button asChild variant="link" className="p-0 h-auto text-accent hover:text-accent/80">
-            <Link href={`/marketplace?artisanId=${artisan.id}`}>
-              View Crafts <ArrowRight className="ml-2 h-4 w-4" />
+            <Link href={`/artisans/${artisan.id}`}>
+              View Profile <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button type="button" variant="outline" size="sm" onClick={handleMessage}>

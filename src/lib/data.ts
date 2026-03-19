@@ -1,16 +1,21 @@
-
 import data from './placeholder-images.json';
-export const placeholderImages = data.placeholderImages;
+import type {
+  ArtisanProcessStep,
+  ArtisanRecord,
+  ArtisanReview,
+  ArtisanVerificationStatus,
+} from '@/types/artisan';
 
-export type Artisan = {
-  id: string;
-  name: string;
-  craft: string;
-  bio: string;
-  image: string;
-  userId?: string;
-  email?: string;
-};
+export type {
+  Artisan,
+  ArtisanMessagingMetadata,
+  ArtisanProcessStep,
+  ArtisanRecord,
+  ArtisanReview,
+  ArtisanVerificationStatus,
+} from '@/types/artisan';
+
+export const placeholderImages = data.placeholderImages;
 
 export type Product = {
   id: string;
@@ -367,7 +372,7 @@ export const mysteryQuizzes: MysteryQuiz[] = [
   }
 ];
 
-export const artisans: Artisan[] = [
+const artisansBase = [
   {
     id: "artisan-1",
     name: "Rajesh Kumar",
@@ -486,6 +491,277 @@ export const artisans: Artisan[] = [
     email: 'mohan.lal@kalaquest.in',
   },
 ];
+
+type ArtisanProfileSeed = {
+  location: string;
+  experienceYears: number;
+  verificationStatus: ArtisanVerificationStatus;
+  galleryIds: string[];
+  craftProcess: ArtisanProcessStep[];
+};
+
+function buildCraftProcess(config: {
+  material: string;
+  shaping: string;
+  detail: string;
+  finish: string;
+}): ArtisanProcessStep[] {
+  return [
+    {
+      step: `Prepare ${config.material}.`,
+      icon: 'hammer',
+    },
+    {
+      step: `Shape each piece using ${config.shaping}.`,
+      icon: 'circle',
+    },
+    {
+      step: `Add signature details through ${config.detail}.`,
+      icon: 'palette',
+    },
+    {
+      step: `Finish the work with ${config.finish}.`,
+      icon: 'flame',
+    },
+  ];
+}
+
+function buildStoryLong(artisan: {
+  name: string;
+  craftType: string;
+  storySummary: string;
+  location: string;
+  experienceYears: number;
+}) {
+  return `${artisan.storySummary} Based in ${artisan.location}, ${artisan.name} has spent ${artisan.experienceYears} years deepening their relationship with ${artisan.craftType}, learning how to preserve the discipline, patience, and material knowledge that give each piece its cultural identity. Their work is shaped by daily practice, stories from senior makers, and a commitment to keeping handcrafted traditions visible in contemporary life. Visitors to the studio often see not just finished objects, but an evolving process of experimentation, correction, and inherited memory that makes every piece feel personal and rooted.`;
+}
+
+function buildGalleryImageUrl(imageId: string) {
+  const found = placeholderImages.find((item) => item.id === imageId);
+  return found?.imageUrl || `https://picsum.photos/seed/${imageId}/900/700`;
+}
+
+function buildReviews(artisan: { name: string; craftType: string }): ArtisanReview[] {
+  return [
+    {
+      reviewerName: 'Ananya S.',
+      rating: 5,
+      text: `The care and detail in ${artisan.name}'s ${artisan.craftType.toLowerCase()} work is immediately visible. It feels deeply authentic and thoughtfully finished.`,
+      date: '2026-02-10',
+    },
+    {
+      reviewerName: 'Rohit M.',
+      rating: 4,
+      text: `I appreciated learning about the process behind the craft. The workmanship and presentation both felt strong and well considered.`,
+      date: '2026-02-14',
+    },
+    {
+      reviewerName: 'Sneha K.',
+      rating: 5,
+      text: `${artisan.name} clearly brings years of experience to every piece. The craft story and finishing details made this profile especially memorable.`,
+      date: '2026-02-18',
+    },
+  ];
+}
+
+const artisanProfileSeeds: Record<string, ArtisanProfileSeed> = {
+  'artisan-1': {
+    location: 'Jaipur, Rajasthan',
+    experienceYears: 22,
+    verificationStatus: 'master',
+    galleryIds: ['artisan-1', 'product-1', 'product-5'],
+    craftProcess: buildCraftProcess({
+      material: 'quartz powder, glass, and natural glaze materials',
+      shaping: 'a mix of moulding and wheel-based forming',
+      detail: 'hand-painted cobalt floral motifs and fine brushwork',
+      finish: 'slow drying, glazing, and kiln firing',
+    }),
+  },
+  'artisan-2': {
+    location: 'Srinagar, Jammu & Kashmir',
+    experienceYears: 41,
+    verificationStatus: 'master',
+    galleryIds: ['artisan-2', 'product-2', 'product-6'],
+    craftProcess: buildCraftProcess({
+      material: 'fine pashmina yarn and naturally dyed threads',
+      shaping: 'loom preparation and hand-guided weaving',
+      detail: 'delicate sozni embroidery and border balancing',
+      finish: 'softening, trimming, and final shawl inspection',
+    }),
+  },
+  'artisan-3': {
+    location: 'Madhubani, Bihar',
+    experienceYears: 18,
+    verificationStatus: 'verified',
+    galleryIds: ['artisan-3', 'product-3', 'product-7'],
+    craftProcess: buildCraftProcess({
+      material: 'handmade paper, bamboo pens, and natural pigments',
+      shaping: 'freehand composition with layered linework',
+      detail: 'dense patterning, symbolic borders, and mythological forms',
+      finish: 'drying, color balancing, and protective mounting',
+    }),
+  },
+  'artisan-4': {
+    location: 'Jaipur, Rajasthan',
+    experienceYears: 27,
+    verificationStatus: 'master',
+    galleryIds: ['artisan-4', 'product-4', 'product-8'],
+    craftProcess: buildCraftProcess({
+      material: 'seasoned sandalwood blocks selected for grain and fragrance',
+      shaping: 'measured carving with chisels and small hand tools',
+      detail: 'jali work, floral carving, and smooth contour refinement',
+      finish: 'sanding, polishing, and careful final detailing',
+    }),
+  },
+  'artisan-5': {
+    location: 'Bankura, West Bengal',
+    experienceYears: 14,
+    verificationStatus: 'verified',
+    galleryIds: ['artisan-5', 'product-9', 'artisan-5-gallery'],
+    craftProcess: buildCraftProcess({
+      material: 'locally sourced clay and terracotta firing mixes',
+      shaping: 'pinching, coiling, and hand-forming techniques',
+      detail: 'surface smoothing and earthy decorative patterning',
+      finish: 'sun-drying and controlled kiln firing',
+    }),
+  },
+  'artisan-6': {
+    location: 'Jodhpur, Rajasthan',
+    experienceYears: 19,
+    verificationStatus: 'emerging',
+    galleryIds: ['artisan-6', 'product-10', 'artisan-6-gallery'],
+    craftProcess: buildCraftProcess({
+      material: 'treated leather, lining fabric, and embroidery threads',
+      shaping: 'pattern cutting, sole shaping, and upper assembly',
+      detail: 'hand embroidery and edge finishing on each pair',
+      finish: 'stitch reinforcement, polishing, and fit inspection',
+    }),
+  },
+  'artisan-7': {
+    location: 'Bhuj, Gujarat',
+    experienceYears: 16,
+    verificationStatus: 'verified',
+    galleryIds: ['artisan-7', 'product-11', 'artisan-7-gallery'],
+    craftProcess: buildCraftProcess({
+      material: 'lightweight silk or cotton and richly pigmented dyes',
+      shaping: 'precise hand tying before each dye bath',
+      detail: 'pattern planning through dots, clusters, and resist sections',
+      finish: 'untying, washing, and color setting',
+    }),
+  },
+  'artisan-8': {
+    location: 'Mainpuri, Uttar Pradesh',
+    experienceYears: 21,
+    verificationStatus: 'master',
+    galleryIds: ['artisan-8', 'product-12', 'artisan-8-gallery'],
+    craftProcess: buildCraftProcess({
+      material: 'wood panels and hand-drawn brass wire',
+      shaping: 'engraving grooves and setting fine inlay channels',
+      detail: 'floral and geometric brass insertion by hand',
+      finish: 'buffing the surface and sealing the wood',
+    }),
+  },
+  'artisan-9': {
+    location: 'Pipli, Odisha',
+    experienceYears: 23,
+    verificationStatus: 'verified',
+    galleryIds: ['artisan-9', 'product-13', 'artisan-9-gallery'],
+    craftProcess: buildCraftProcess({
+      material: 'brightly dyed cotton fabrics and layered stitching materials',
+      shaping: 'cutting motifs and arranging layered fabric panels',
+      detail: 'dense appliquÃ© stitching and contrast borders',
+      finish: 'reinforcement, trimming, and final hanging preparation',
+    }),
+  },
+  'artisan-10': {
+    location: 'Srikalahasti, Andhra Pradesh',
+    experienceYears: 17,
+    verificationStatus: 'verified',
+    galleryIds: ['artisan-10', 'product-14', 'artisan-10-gallery'],
+    craftProcess: buildCraftProcess({
+      material: 'treated cotton fabric and plant-based dyes',
+      shaping: 'freehand drawing with a bamboo kalam pen',
+      detail: 'layered outlines, mythological scenes, and natural dye fills',
+      finish: 'washing, sun drying, and fabric setting',
+    }),
+  },
+  'artisan-11': {
+    location: 'Lucknow, Uttar Pradesh',
+    experienceYears: 15,
+    verificationStatus: 'verified',
+    galleryIds: ['artisan-11', 'product-15', 'artisan-11-gallery'],
+    craftProcess: buildCraftProcess({
+      material: 'velvet or silk bases with metallic threads and embellishments',
+      shaping: 'frame setup and motif transfer onto fabric',
+      detail: 'dense hand embroidery with zari, dabka, and sequins',
+      finish: 'thread securing, backing, and final presentation finishing',
+    }),
+  },
+  'artisan-12': {
+    location: 'Bidar, Karnataka',
+    experienceYears: 24,
+    verificationStatus: 'master',
+    galleryIds: ['artisan-12', 'product-16', 'artisan-12-gallery'],
+    craftProcess: buildCraftProcess({
+      material: 'zinc alloy forms and fine silver wire or sheet',
+      shaping: 'casting the vessel and marking the inlay pattern',
+      detail: 'hand inlaying silver into engraved channels',
+      finish: 'blackening the metal surface and polishing the contrast',
+    }),
+  },
+  'artisan-13': {
+    location: 'Alappuzha, Kerala',
+    experienceYears: 13,
+    verificationStatus: 'emerging',
+    galleryIds: ['artisan-13', 'product-17', 'artisan-13-gallery'],
+    craftProcess: buildCraftProcess({
+      material: 'processed coconut fiber and natural weaving cords',
+      shaping: 'twisting fibers into workable yarn and loom-ready bundles',
+      detail: 'pattern weaving, edge binding, and texture balancing',
+      finish: 'brushing, trimming, and durability checks',
+    }),
+  },
+  'artisan-14': {
+    location: 'Channapatna, Karnataka',
+    experienceYears: 26,
+    verificationStatus: 'master',
+    galleryIds: ['artisan-14', 'product-18', 'artisan-14-gallery'],
+    craftProcess: buildCraftProcess({
+      material: 'soft local wood and natural lacquer pigments',
+      shaping: 'turning the wood on a lathe into balanced forms',
+      detail: 'applying layered lacquer colors while the wood spins',
+      finish: 'buffing for a smooth, child-safe glossy surface',
+    }),
+  },
+};
+
+export const artisans: ArtisanRecord[] = artisansBase.map((artisan) => {
+  const profile = artisanProfileSeeds[artisan.id];
+
+  return {
+    id: artisan.id,
+    name: artisan.name,
+    location: profile.location,
+    craftType: artisan.craft,
+    experienceYears: profile.experienceYears,
+    verificationStatus: profile.verificationStatus,
+    storyLong: buildStoryLong({
+      name: artisan.name,
+      craftType: artisan.craft,
+      storySummary: artisan.bio,
+      location: profile.location,
+      experienceYears: profile.experienceYears,
+    }),
+    craftProcess: profile.craftProcess,
+    galleryImages: profile.galleryIds.map((imageId) => buildGalleryImageUrl(imageId)),
+    reviews: buildReviews({
+      name: artisan.name,
+      craftType: artisan.craft,
+    }),
+    email: artisan.email,
+    userId: artisan.userId,
+  };
+});
 
 export const products: Product[] = [
   {
