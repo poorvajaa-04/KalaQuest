@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { states, type StateInfo, type ArtFormStory } from '@/lib/data';
@@ -9,11 +10,76 @@ import { Map, Palette, ArrowLeft } from 'lucide-react';
 type PathChoice = 'A' | 'B' | null;
 
 export default function MysteryStoriesPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [selectedState, setSelectedState] = useState<StateInfo | null>(null);
   const [selectedArtForm, setSelectedArtForm] = useState<ArtFormStory | null>(null);
   const [choice, setChoice] = useState<PathChoice>(null);
 
+  useEffect(() => {
+    const stateId = searchParams.get('state');
+    const storyId = searchParams.get('story');
+
+    if (!stateId) {
+      return;
+    }
+
+    const matchedState = states.find((item) => item.id === stateId);
+    if (!matchedState) {
+      return;
+    }
+
+    setSelectedState(matchedState);
+
+    if (!storyId) {
+      setSelectedArtForm(null);
+      setChoice(null);
+      return;
+    }
+
+    const matchedStory = matchedState.artForms.find((item) => item.id === storyId);
+    if (!matchedStory) {
+      return;
+    }
+
+    setSelectedArtForm(matchedStory);
+    setChoice(null);
+  }, [searchParams]);
+
+  function openState(state: StateInfo) {
+    setSelectedState(state);
+    setSelectedArtForm(null);
+    setChoice(null);
+    router.replace(`/mystery-stories?state=${state.id}`);
+  }
+
+  function openStory(state: StateInfo, artForm: ArtFormStory) {
+    setSelectedState(state);
+    setSelectedArtForm(artForm);
+    setChoice(null);
+    router.replace(`/mystery-stories?state=${state.id}&story=${artForm.id}`);
+  }
+
+  function goBackToStates() {
+    setSelectedState(null);
+    setSelectedArtForm(null);
+    setChoice(null);
+    router.replace('/mystery-stories');
+  }
+
+  function goBackToArtForms() {
+    if (!selectedState) {
+      goBackToStates();
+      return;
+    }
+
+    setSelectedArtForm(null);
+    setChoice(null);
+    router.replace(`/mystery-stories?state=${selectedState.id}`);
+  }
+
   if (selectedArtForm && selectedState) {
+    const storyMoments = selectedArtForm.story;
     const introduction = `You are a young artisan from ${selectedState.name}, learning ${selectedArtForm.name} from elders in your family workshop. Every motif, rhythm, and material carries memory from generations who kept this tradition alive through their hands.`;
     const origin = `${selectedArtForm.name} grew through community-led artisan traditions in ${selectedState.name}, where knowledge passed through practice, oral teaching, and patient craftsmanship.`;
     const situation = `Before festival season, a city buyer offers a large order with one condition: produce fast with shortcuts. Your mentor asks you to decide what kind of artisan you want to become.`;
@@ -36,10 +102,7 @@ export default function MysteryStoriesPage() {
       <div className="container mx-auto px-4 py-8 md:px-6 md:py-12">
         <Button
           variant="outline"
-          onClick={() => {
-            setSelectedArtForm(null);
-            setChoice(null);
-          }}
+          onClick={goBackToArtForms}
           className="mb-8"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -59,18 +122,25 @@ export default function MysteryStoriesPage() {
               </div>
 
               <div className="space-y-3">
-                <h4 className="font-headline text-xl">1. Introduction</h4>
+                <h4 className="font-headline text-xl">1. Mystery Story</h4>
+                {storyMoments.map((line, index) => (
+                  <p key={`${selectedArtForm.id}-story-${index}`}>{line}</p>
+                ))}
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="font-headline text-xl">2. Introduction</h4>
                 <p>{introduction}</p>
                 <p>{origin}</p>
               </div>
 
               <div className="space-y-3">
-                <h4 className="font-headline text-xl">2. Situation</h4>
+                <h4 className="font-headline text-xl">3. Situation</h4>
                 <p>{situation}</p>
               </div>
 
               <div className="space-y-3">
-                <h4 className="font-headline text-xl">3. Choose</h4>
+                <h4 className="font-headline text-xl">4. Choose</h4>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Button variant={choice === 'A' ? 'default' : 'outline'} onClick={() => setChoice('A')}>
                     A. Fast order and shortcuts
@@ -83,7 +153,7 @@ export default function MysteryStoriesPage() {
 
               {choice === 'A' && (
                 <div className="space-y-3">
-                  <h4 className="font-headline text-xl">4A. Your Path</h4>
+                  <h4 className="font-headline text-xl">5A. Your Path</h4>
                   <ul className="list-disc pl-5 space-y-2">
                     {pathA.map((line, index) => (
                       <li key={index}>{line}</li>
@@ -94,7 +164,7 @@ export default function MysteryStoriesPage() {
 
               {choice === 'B' && (
                 <div className="space-y-3">
-                  <h4 className="font-headline text-xl">4B. Your Path</h4>
+                  <h4 className="font-headline text-xl">5B. Your Path</h4>
                   <ul className="list-disc pl-5 space-y-2">
                     {pathB.map((line, index) => (
                       <li key={index}>{line}</li>
@@ -105,7 +175,7 @@ export default function MysteryStoriesPage() {
 
               {choice && (
                 <div className="space-y-3">
-                  <h4 className="font-headline text-xl">5. Reflection</h4>
+                  <h4 className="font-headline text-xl">6. Reflection</h4>
                   <p>{reflection}</p>
                 </div>
               )}
@@ -121,7 +191,7 @@ export default function MysteryStoriesPage() {
       <div className="container mx-auto px-4 py-8 md:px-6 md:py-12">
         <Button
           variant="outline"
-          onClick={() => setSelectedState(null)}
+          onClick={goBackToStates}
           className="mb-8"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -137,15 +207,13 @@ export default function MysteryStoriesPage() {
           {selectedState.artForms.map((artForm) => (
             <button
               key={artForm.id}
-              onClick={() => {
-                setSelectedArtForm(artForm);
-                setChoice(null);
-              }}
+              onClick={() => openStory(selectedState, artForm)}
               className="text-left h-full"
             >
               <Card className="parchment text-center flex flex-col items-center justify-center p-6 h-full transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl focus:ring-2 focus:ring-primary">
                 <Palette className="h-10 w-10 text-primary mb-3" />
                 <CardTitle className="font-headline text-xl flex-grow">{artForm.name}</CardTitle>
+                <CardDescription className="mt-2 text-sm">{artForm.story[0]}</CardDescription>
               </Card>
             </button>
           ))}
@@ -167,7 +235,7 @@ export default function MysteryStoriesPage() {
         {states.map((item) => (
           <button
             key={item.id}
-            onClick={() => setSelectedState(item)}
+            onClick={() => openState(item)}
             className="text-left h-full"
           >
             <Card className="parchment text-center flex flex-col items-center justify-center p-4 h-full transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl focus:ring-2 focus:ring-primary">

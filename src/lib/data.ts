@@ -53,6 +53,16 @@ export type StateInfo = {
   artForms: ArtFormStory[];
 };
 
+export type MysteryStoryEntry = {
+  stateId: string;
+  stateName: string;
+  artFormId: string;
+  title: string;
+  description: string;
+  story: string[];
+  href: string;
+};
+
 export type JobOpportunity = {
   id: string;
   title: string;
@@ -333,6 +343,19 @@ export const states: StateInfo[] = [
     ]
   }
 ];
+
+export const mysteryStories: MysteryStoryEntry[] = states.flatMap((state) =>
+  state.artForms.map((artForm) => ({
+    stateId: state.id,
+    stateName: state.name,
+    artFormId: artForm.id,
+    title: artForm.name,
+    description: artForm.story[0] ?? `Explore the story of ${artForm.name} from ${state.name}.`,
+    story: artForm.story,
+    href: `/mystery-stories?state=${state.id}&story=${artForm.id}`,
+  })),
+);
+
 export const mysteryQuizzes: MysteryQuiz[] = [
   {
     id: "mystery-1",

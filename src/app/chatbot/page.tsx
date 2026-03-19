@@ -22,6 +22,14 @@ interface ChatApiResponse {
   details?: string;
 }
 
+interface ChatbotHealthResponse {
+  ok: boolean;
+  ready?: boolean;
+  requiresApiKey?: boolean;
+  error?: string;
+  details?: string;
+}
+
 const USER_KEY = 'chatbot-manual-user-id';
 const MAP_KEY = 'chatbot-conversation-map';
 
@@ -59,6 +67,8 @@ export default function ChatbotPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isSending, setIsSending] = useState(false);
   const [status, setStatus] = useState('');
+  const [apiReady, setApiReady] = useState<boolean | null>(null);
+  const [apiStatusMessage, setApiStatusMessage] = useState('Checking chatbot service...');
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -73,6 +83,46 @@ export default function ChatbotPage() {
       localStorage.setItem(USER_KEY, generated);
       setManualUserId(generated);
     }
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function checkChatbotHealth() {
+      try {
+        const response = await fetch('/api/chatbot', {
+          method: 'GET',
+          cache: 'no-store',
+        });
+
+        const data = (await response.json()) as ChatbotHealthResponse;
+        const isReady = Boolean(data.ok && data.ready && data.requiresApiKey);
+
+        if (!isMounted) {
+          return;
+        }
+
+        setApiReady(isReady);
+        setApiStatusMessage(
+          isReady
+            ? 'Chatbot service is ready.'
+            : data.details ?? data.error ?? 'Chatbot service is reachable, but the model API key is not configured on the server.',
+        );
+      } catch (error) {
+        if (!isMounted) {
+          return;
+        }
+
+        setApiReady(false);
+        setApiStatusMessage(error instanceof Error ? error.message : 'Unable to reach /api/chatbot.');
+      }
+    }
+
+    checkChatbotHealth();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const userId = useMemo(() => {
@@ -100,6 +150,11 @@ export default function ChatbotPage() {
   async function sendMessage(event: FormEvent) {
     event.preventDefault();
     if (!message.trim() || !userId || !conversationId) {
+      return;
+    }
+
+    if (apiReady === false) {
+      setStatus(apiStatusMessage);
       return;
     }
 
@@ -150,6 +205,11 @@ export default function ChatbotPage() {
 
   async function saveMemory() {
     if (!memoryInput.trim() || !userId) {
+      return;
+    }
+
+    if (apiReady === false) {
+      setStatus(apiStatusMessage);
       return;
     }
 
@@ -237,9 +297,12 @@ export default function ChatbotPage() {
           </div>
 
           <div className="rounded-md border p-3">
-            <p className="text-sm font-medium">API Key Setup</p>
+            <p className="text-sm font-medium">Chatbot Service Status</p>
             <p className="text-sm text-muted-foreground">
-              Set your own `GOOGLE_API_KEY` in `.env.local` and restart the server. Do not use Firebase `apiKey` for chatbot model calls.
+              {apiStatusMessage}
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Set your own `GOOGLE_API_KEY` in `.env.local` for localhost and in your Vercel project environment variables for deployment. Do not use Firebase `apiKey` for chatbot model calls.
             </p>
           </div>
 
@@ -250,9 +313,9 @@ export default function ChatbotPage() {
                 value={memoryInput}
                 onChange={(event) => setMemoryInput(event.target.value)}
                 placeholder="Example: I am vegetarian"
-                disabled={isSending || !userId}
+                disabled={isSending || !userId || apiReady === false}
               />
-              <Button type="button" onClick={saveMemory} disabled={isSending || !memoryInput.trim() || !userId}>
+              <Button type="button" onClick={saveMemory} disabled={isSending || !memoryInput.trim() || !userId || apiReady === false}>
                 Remember
               </Button>
             </div>
@@ -280,11 +343,11 @@ export default function ChatbotPage() {
               onChange={(event) => setMessage(event.target.value)}
               placeholder="Ask anything. For inline save: remember that I like pottery"
               rows={4}
-              disabled={isSending || !userId || !conversationId}
+              disabled={isSending || !userId || !conversationId || apiReady === false}
             />
             <div className="flex items-center justify-between">
               <p className="text-xs text-muted-foreground">Conversation is persisted by user ID in browser local storage.</p>
-              <Button type="submit" disabled={isSending || !message.trim() || !userId || !conversationId}>
+              <Button type="submit" disabled={isSending || !message.trim() || !userId || !conversationId || apiReady === false}>
                 {isSending ? 'Sending...' : 'Send'}
               </Button>
             </div>

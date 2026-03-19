@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { chatWithMemory, rememberMany } from '@/ai/chatbot';
+import { getMissingModelApiKeyMessage, hasModelApiKey } from '@/ai/config';
 import { searchMemory } from '@/ai/vector-memory';
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 const requestSchema = z.object({
   mode: z.enum(['chat', 'remember', 'search']).default('chat'),
@@ -23,15 +27,11 @@ function normalizeRememberInput(input: string | string[] | undefined) {
   return (Array.isArray(input) ? input : [input]).map((item) => item.trim()).filter(Boolean);
 }
 
-function hasModelApiKey() {
-  return Boolean(process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY);
-}
-
 function missingApiKeyResponse() {
   return NextResponse.json(
     {
       error: 'Missing model API key',
-      details: 'Set GOOGLE_API_KEY (or GEMINI_API_KEY) in .env.local and restart the server. Do not use Firebase apiKey for LLM calls.',
+      details: getMissingModelApiKeyMessage(),
     },
     { status: 500 },
   );
@@ -116,6 +116,7 @@ export async function GET() {
     endpoint: '/api/chatbot',
     modes: ['chat', 'remember', 'search'],
     requiresApiKey: hasModelApiKey(),
+    ready: hasModelApiKey(),
     note: 'POST JSON with `userId` and mode-specific fields.',
   });
 }
