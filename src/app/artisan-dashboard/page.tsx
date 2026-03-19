@@ -72,8 +72,8 @@ export default function ArtisanDashboardPage() {
     <AuthGuard>
       <ArtisanRoleSync />
       <div className="min-h-screen bg-[#f8f4ee] text-slate-900">
-        <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
-          <header className="mb-10 flex flex-col gap-6">
+        <div className="container mx-auto max-w-6xl px-4 py-8 md:px-6 md:py-12">
+          <header className="mb-12 flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Kala Quest</p>
               <h1 className="font-headline text-3xl text-slate-900 md:text-4xl">

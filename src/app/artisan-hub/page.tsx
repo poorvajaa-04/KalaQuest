@@ -3,18 +3,17 @@ import { AuthGuard } from "@/components/auth/auth-guard";
 import { ArtisanRoleSync } from "@/components/auth/artisan-role-sync";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageIntro, PageShell } from "@/components/page-shell";
 
 export default function ArtisanHubPage() {
   return (
     <AuthGuard>
       <ArtisanRoleSync />
-      <div className="container mx-auto px-4 py-8 md:px-6 md:py-12">
-        <div className="mb-8 text-center">
-          <h1 className="font-headline text-4xl md:text-5xl">Artisan Hub</h1>
-          <p className="mt-3 text-base text-foreground/80">
-            Your starting point for selling crafts and managing payouts.
-          </p>
-        </div>
+      <PageShell>
+        <PageIntro
+          title="Artisan Hub"
+          description="Your starting point for selling crafts and managing payouts."
+        />
         <div className="mx-auto grid max-w-3xl gap-6 md:grid-cols-2">
           <Card className="parchment">
             <CardHeader>
@@ -39,7 +38,7 @@ export default function ArtisanHubPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
+      </PageShell>
     </AuthGuard>
   );
 }

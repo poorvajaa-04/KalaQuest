@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useFirestore } from "@/firebase";
 import { useUser } from "@/firebase/auth/use-user";
+import { PageIntro, PageShell } from "@/components/page-shell";
 
 export default function ArtisanPayoutsPage() {
   const { toast } = useToast();
@@ -135,13 +136,11 @@ export default function ArtisanPayoutsPage() {
   return (
     <AuthGuard>
       <ArtisanRoleSync />
-      <div className="container mx-auto px-4 py-8 md:px-6 md:py-12">
-        <div className="mb-8 text-center">
-          <h1 className="font-headline text-4xl md:text-5xl">Receive Payments</h1>
-          <p className="mt-3 text-base text-foreground/80">
-            Add payout details to receive earnings from your craft sales.
-          </p>
-        </div>
+      <PageShell>
+        <PageIntro
+          title="Receive Payments"
+          description="Add payout details to receive earnings from your craft sales."
+        />
         <div className="mx-auto grid max-w-4xl gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <Card className="parchment">
             <CardHeader>
@@ -277,7 +276,7 @@ export default function ArtisanPayoutsPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
+      </PageShell>
     </AuthGuard>
   );
 }

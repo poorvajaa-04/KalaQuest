@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useFirestore } from "@/firebase";
 import { useUser } from "@/firebase/auth/use-user";
+import { PageIntro, PageShell } from "@/components/page-shell";
 
 export default function ArtisanUploadPage() {
   const { toast } = useToast();
@@ -127,13 +128,11 @@ export default function ArtisanUploadPage() {
   return (
     <AuthGuard>
       <ArtisanRoleSync />
-      <div className="container mx-auto px-4 py-8 md:px-6 md:py-12">
-        <div className="mb-8 text-center">
-          <h1 className="font-headline text-4xl md:text-5xl">Upload & Sell Crafts</h1>
-          <p className="mt-3 text-base text-foreground/80">
-            Share your craft story, set your price, and publish new listings.
-          </p>
-        </div>
+      <PageShell>
+        <PageIntro
+          title="Upload & Sell Crafts"
+          description="Share your craft story, set your price, and publish new listings."
+        />
         <div className="mx-auto grid max-w-4xl gap-6 lg:grid-cols-[1.2fr_0.8fr]">
           <Card className="parchment">
             <CardHeader>
@@ -248,7 +247,7 @@ export default function ArtisanUploadPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
+      </PageShell>
     </AuthGuard>
   );
 }

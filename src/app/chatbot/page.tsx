@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { PageShell } from '@/components/page-shell';
 
 interface ChatMessage {
   id: string;
@@ -207,7 +208,7 @@ export default function ChatbotPage() {
   }
 
   return (
-    <div className="container mx-auto max-w-5xl px-4 py-8">
+    <PageShell className="max-w-5xl">
       <Card>
         <CardHeader>
           <CardTitle>AI Chatbot with Long-Term Memory</CardTitle>
@@ -292,6 +293,6 @@ export default function ChatbotPage() {
           {status ? <p className="text-sm text-destructive">{status}</p> : null}
         </CardContent>
       </Card>
-    </div>
+    </PageShell>
   );
 }

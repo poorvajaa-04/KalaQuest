@@ -1,9 +1,10 @@
 import { PlanYourVisit } from "@/components/plan-your-visit";
+import { PageShell } from "@/components/page-shell";
 
 export default function PlanVisitPage() {
   return (
-    <div className="container mx-auto max-w-7xl p-4 md:p-8">
+    <PageShell className="max-w-7xl">
       <PlanYourVisit />
-    </div>
+    </PageShell>
   );
 }

@@ -15,12 +15,25 @@ import { Skeleton } from "./ui/skeleton";
 
 const navItems = [
   { href: "/", label: "Home" },
-  { href: "/plan-visit", label: "Plan a Visit" },
-  { href: "/mystery-stories", label: "Mystery Stories & Art Forms" },
+  { href: "/discover-crafts", label: "Discover Crafts" },
+  { href: "/quests", label: "Quests" },
   { href: "/artisans", label: "Artisans" },
   { href: "/marketplace", label: "Marketplace" },
+  { href: "/craft-lab", label: "Craft Lab" },
+  { href: "/staycation-planner", label: "Staycation Planner" },
   { href: "/opportunities", label: "Opportunities" },
 ];
+
+const navRouteGroups: Record<string, string[]> = {
+  "/": ["/"],
+  "/discover-crafts": ["/discover-crafts", "/mystery-stories"],
+  "/quests": ["/quests", "/adventure"],
+  "/artisans": ["/artisans"],
+  "/marketplace": ["/marketplace", "/checkout"],
+  "/craft-lab": ["/craft-lab", "/music", "/puzzle", "/crossword", "/coloring", "/chatbot"],
+  "/staycation-planner": ["/staycation-planner", "/plan-visit"],
+  "/opportunities": ["/opportunities"],
+};
 
 export function Header() {
   const pathname = usePathname();
@@ -28,6 +41,11 @@ export function Header() {
   const { cartCount } = useCart();
   const { user, isLoading } = useUser();
   const [isArtisan, setIsArtisan] = useState(false);
+
+  const isNavItemActive = (href: string) => {
+    const relatedRoutes = navRouteGroups[href] ?? [href];
+    return relatedRoutes.some((route) => pathname === route || pathname.startsWith(`${route}/`));
+  };
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -89,7 +107,7 @@ export function Header() {
                 href={item.href}
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-primary",
-                  pathname === item.href ? "text-primary" : "text-foreground/60"
+                  isNavItemActive(item.href) ? "text-primary" : "text-foreground/60"
                 )}
               >
                 {item.label}
@@ -138,7 +156,7 @@ export function Header() {
                         onClick={() => setMobileMenuOpen(false)}
                         className={cn(
                           "text-lg font-medium transition-colors hover:text-primary",
-                          pathname === item.href ? "text-primary" : "text-foreground/80"
+                          isNavItemActive(item.href) ? "text-primary" : "text-foreground/80"
                         )}
                       >
                         {item.label}
