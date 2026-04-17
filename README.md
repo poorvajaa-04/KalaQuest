@@ -1,19 +1,48 @@
-# Kala Quest
-Kala Quest is an interactive web platform where users explore Indian heritage through story-based quests, culture-inspired games, and direct engagement with artisans, while supporting traditional crafts through a built-in marketplace and opportunities system.
+# 🎭 Kala Quest
+
+**Kala Quest** is an interactive platform that makes Indian heritage engaging through story-based quests, cultural games, and direct connections with artisans—while supporting traditional crafts through a built-in marketplace.
+
+---
+
+## 🌟 Problem
+
+Traditional Indian art and crafts are:
+- Hard to discover for younger audiences  
+- Not engaging in digital formats  
+- Lacking direct connection between users and artisans  
+
+---
+
+## 💡 Solution
+
+Kala Quest transforms cultural learning into an **interactive experience** by combining:
+- Story-driven quests  
+- Gamified learning  
+- AI-powered personalization  
+- Direct artisan engagement  
+
+---
 
 ## Live Demo
 - https://kalaquest-mu.vercel.app
 
-## Features
-- Mystery-driven quests with collectible clues
-- Artisan profiles and product storytelling
-- Personalized recommendations powered by AI
-- Secure marketplace flow
-- Heritage ledger for product history
-- AI chatbot with long-term vector memory
+---
+## 🚀 Key Features
 
-## Platform Flow
+- 🧩 Story-based mystery quests with collectible clues  
+- 🎮 Interactive cultural games (puzzles, simulations, etc.)  
+- 🧑‍🎨 Artisan profiles with storytelling + products  
+- 🛍️ Integrated marketplace for crafts  
+- 🤖 AI chatbot with long-term memory  
+- 🧠 Personalized recommendations  
+
+---
+
+## 🔄 Platform Flow
+
 Login -> Dashboard -> Featured Crafts -> Story Quest -> Interactive Play -> Cultural Exploration -> Artisan Profiles -> Marketplace -> Opportunities
+
+---
 
 ## Screenshots
 ### Home Page
@@ -37,24 +66,34 @@ Login -> Dashboard -> Featured Crafts -> Story Quest -> Interactive Play -> Cult
 ### Opportunities
 ![Opportunities](docs/screenshots/Opportunities.png)
 
-## What Kala Quest Does (At a Glance)
-Opens with a personalized dashboard featuring curated crafts and active learning quests
+--- 
 
-Teaches art forms (e.g., Persian glaze pottery) through short narrative stories + interactive questions
+## 🛠️ Tech Stack
 
-Converts cultural learning into playable experiences like pottery simulations, puzzles, mandala coloring, and heritage crosswords
+### Frontend
+- Next.js 15  
+- React 19  
+- TypeScript  
+- Tailwind CSS  
 
-Lets users explore India state by state through focused cultural stories
+### Backend & Services
+- Firebase (Auth + Firestore)  
+- Genkit + Google GenAI  
 
-Connects users directly with artisans via profiles, products, and commissions
+### Tools
+- Radix UI / shadcn  
+- Vercel  
 
-Supports artisan livelihoods through marketplace purchases and work opportunities
+---
 
-## Tech Stack
-- Next.js 15, React 19, TypeScript
-- Tailwind CSS, Radix UI, shadcn/ui-style components
-- Firebase (Auth + Firestore)
-- Genkit + Google GenAI
+## 👨‍💻 My Contribution
+
+- I created a separate page for the artisans that made the website free friendly to artisans
+- I created a one on one chat with the artisan and customer
+- I added the ratings section in the marketplace that  helps the customer to give ratings and write reviews so that the legitamcy of website is maintained
+- I improved the navigation of the website so that the users to increase the retention period
+
+---
 
 ## Getting Started
 1. Install dependencies:
