@@ -1,4 +1,4 @@
-# 🎭 Kala Quest
+# Kala Quest
 
 **Kala Quest** is an interactive platform that makes Indian heritage engaging through story-based quests, cultural games, and direct connections with artisans—while supporting traditional crafts through a built-in marketplace.
 
